@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import openpyxl
+import openpyxl as xl
 # import plotly
 # from plotly import plotly.express as px
 import plotly.express as px
@@ -9,7 +9,7 @@ import plotly.express as px
 # import iost
 # from io import BytesIO
 # import msoffcrypto
-import matplotlib
+import matplotlib.pyplot as plt
 
 df_all = pd.read_excel(
     # io = 'C:/Users/USER/anaconda3/envs/streamlit_test/visitor.xlsx',

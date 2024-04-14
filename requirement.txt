@@ -1,0 +1,5 @@
+streamlit as st
+pandas as pd
+openpyxl
+plotly.express as px
+matplotlib

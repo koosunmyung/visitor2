@@ -58,7 +58,7 @@ df.info()
 # https://docs.kanaries.net/ko/topics/Streamlit/streamlit-dataframe
 
 #스트림릿용 df
-S_df = df.astype({'년':'str','월':'str', '관람객':'int', '일자':'str','일차':'str', '무료':'str', '유료':'str'})
+S_df = df.astype({'년':'str','월':'str', '관람객':'int', '일자':'str','일차':'int', '무료':'str', '유료':'str'})
 
 st.sidebar.header("Please Filter Here:")
 전시 = st.sidebar.multiselect(
@@ -67,6 +67,15 @@ st.sidebar.header("Please Filter Here:")
     default=df["전시명"].unique()
 )
 
+
+
+# 최신 전시일 확인 (윤협)
+# df_MAX_D = df.loc[(df['전시명'] == '윤협') & (df['관람객'] > 0)]['일차'].transform('max')
+df_MAX_D = df.loc[(df['전시명'] == '윤협') & (df['관람객'] > 0)]
+print(df_MAX_D)
+MAX_Day = df_MAX_D['일차'].max(axis=0)
+st.title(MAX_Day)
+df_MAX_D = df.loc[(df['전시명'] == '윤협') & (df['관람객'] > 0) & (df['관람객'] <= MAX_Day)]
 
 S_df_selection = S_df.query(
     # "전시 == @city & Customer_type ==@customer_type & Gender == @gender"
@@ -84,20 +93,19 @@ table {background-color: #f0f0f0;}
 st.dataframe(S_df_selection.style.background_gradient(cmap='Blues'))
 
 
-# 최신 전시일 확인 (윤협)
-# df_MAX_D = df.loc[(df['전시명'] == '윤협') & (df['관람객'] > 0)]['일차'].transform('max')
-df_MAX_D = df.loc[(df['전시명'] == '윤협') & (df['관람객'] > 0)]
 
-print(df_MAX_D)
-
-MAX_Day = df_MAX_D['일차'].max(axis=0)
-print(MAX_Day)
-
-st.title(MAX_Day)
+# print(MAX_Day)
 
 # sales_by_hour[bar_chart]	
-	
-visitor = S_df_selection.groupby(by=["전시명"]).sum()[["관람객k"]].sort_values(by="관람객k")
+
+일차 = st.slider("전시일차선택 : ", 1,MAX_Day)
+
+S_df_selection2 = S_df.query(
+    # "전시 == @city & Customer_type ==@customer_type & Gender == @gender"
+    "전시명 == @전시 & 일차 <= @일차"
+)
+
+visitor = S_df_selection2.groupby(by=["전시명"]).sum()[["관람객k"]].sort_values(by="관람객k")
 
 전시별관람객 = px.bar(
 visitor,
@@ -125,8 +133,7 @@ font=dict(size=15))
 
 st.plotly_chart(전시별관람객)
 
-
-st.slider("전시일차선택 : ", 1,MAX_Day)
+# 일차 = st.slider("전시일차선택 : ", 1,MAX_Day)
 
 
 

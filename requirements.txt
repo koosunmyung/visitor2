@@ -1,5 +1,5 @@
-streamlit
-pandas
-openpyxl
-plotly.express
-matplotlib.pyplot
+matplotlib==3.8.4
+openpyxl==3.1.2
+pandas==2.2.2
+plotly==5.20.0
+streamlit==1.33.0
